@@ -123,6 +123,7 @@ group.add_argument('--countObjects', action='store_const', const=True, help="com
 parser.add_argument('--type', metavar='userAccount', help="type d'objet à rechercher (userAccount, alias, dl ou calresource)")
 group.add_argument('--getResource', action='store_const', const=True, help="rechercher une resource")
 group.add_argument('--getAllResources', action='store_const', const=True, help="rechercher toutes les resources")
+group.add_argument('--deleteResource', action='store_const', const=True, help="Supprimer une resource")
 
 # Requêtes sur les groupes
 group.add_argument( '--getAllGroups', action = 'store_true' ,
@@ -782,11 +783,9 @@ elif args[ 'getResource' ]:
         if not args[ 'email' ]:
             raise Exception( "Argument 'email' manquant" )
         data = { 'name' : args[ 'email' ] }
-        if 'fullData' in args:
-            data[ 'full_info' ] = args[ 'fullData' ]
         resource = ResourceService.getResource( **data )
     except Exception as err:
-        print( "Echec d'exécution : {}".format( repr( err ) ) )
+        print( "Echec d'exécution 11 : {}".format( repr( err ) ) )
         sys.exit( 2 )
     if resource is None:
         print( "Groupe {} non trouvé".format( args[ 'email' ] ) )
@@ -812,6 +811,16 @@ elif args[ 'getAllResources' ]:
         print( "Resource {} : ".format( resource.name ) )
         print( resource.showAttr( ) )
         print( )
+
+elif args[ 'deleteResource' ]:
+    try:
+        if not args[ 'email' ]:
+            raise Exception( "Argument 'email' manquant" )
+        ResourceService.deleteResource( args[ 'email' ] )
+    except Exception as err:
+        print( "Echec d'exécution : {}".format( repr( err ) ) )
+        sys.exit( 2 )
+    print( "Ressource {} supprimé".format( args[ 'email' ] ) )
 
 else:
     print("Aucune opération à exécuter")
