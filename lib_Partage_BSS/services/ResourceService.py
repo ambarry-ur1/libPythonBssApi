@@ -63,20 +63,13 @@ def getResource( name ):
             si aucune resource ne correspond au nom spécifié
     """
     if not utils.checkIsMailAddress( name ):
-        raise NameException( "L'adresse mail {} n'est pas valide".format(
-                name ) )
-
+        raise NameException( "L'adresse mail {} n'est pas valide".format( name ) )
     data = { 'name' : name }
     domain = services.extractDomain( name )
     response = callMethod( domain , 'GetResource' , data )
-
-    try:
-        checkResponseStatus(response)
-    except NotFoundException:
-        return None
-
-    resource = Resource.from_bss( response[ 'resource' ] )
-    return resource
+    checkResponseStatus(response)
+    resource = response[ 'resource' ]
+    return Resource.from_bss( resource )
 
 #-------------------------------------------------------------------------------
 # Création & suppression
@@ -122,3 +115,30 @@ def createResource( name_or_resource, userPassword, zimbraCalResType ):
     checkResponseStatus( response)
 
     return getResource(name)
+
+def deleteResource( name_or_resource ):
+    """
+    Supprime une ressource.
+
+    :param name_or_resource: le nom de la resource, ou bien l'instance de modèle \
+            correspondante.
+
+    :raises NameException: l'adresse de la resource spécifiée est incorrecte
+    :raises ServiceException: la requête vers l'API a echoué
+    :raises DomainException: le domaine n'est pas valide
+    """
+    if isinstance( name_or_resource , Resource ):
+        if name_or_resource.name is None:
+            raise NameException( "L'adresse mail n'est pas renseignée" )
+        data = { 'name' : name_or_resource.name }
+    else:
+        if not isinstance( name_or_resource , str ):
+            raise TypeError
+        data = { 'name' : name_or_resource }
+
+    if not utils.checkIsMailAddress( data[ 'name' ] ):
+        raise NameException( "L'adresse mail {} n'est pas valide".format( name_or_resource ) )
+
+    domain = services.extractDomain( data[ 'name' ] )
+    response = callMethod( domain , 'DeleteResource' , data )
+    checkResponseStatus( response)
