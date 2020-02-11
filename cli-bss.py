@@ -9,11 +9,13 @@ import json
 from lib_Partage_BSS.exceptions import *
 from lib_Partage_BSS.models.Account import Account, importJsonAccount
 from lib_Partage_BSS.models.Group import Group
-from lib_Partage_BSS.services import AccountService , GroupService
+from lib_Partage_BSS.services import AccountService , GroupService, ResourceService
 from lib_Partage_BSS.models.COS import COS
 from lib_Partage_BSS.services import COSService
 from lib_Partage_BSS.services import DomainService
 from lib_Partage_BSS.services.BSSConnexionService import BSSConnexion
+
+from lib_Partage_BSS.models.Resource import Resource
 
 printer = pprint.PrettyPrinter(indent=4)
 
@@ -119,6 +121,8 @@ group.add_argument('--getAllCos', action='store_const', const=True, help="recher
 group.add_argument('--getDomain', action='store_const', const=True, help="informations sur un domaine")
 group.add_argument('--countObjects', action='store_const', const=True, help="compter les objets d'un domaine")
 parser.add_argument('--type', metavar='userAccount', help="type d'objet à rechercher (userAccount, alias, dl ou calresource)")
+group.add_argument('--getResource', action='store_const', const=True, help="rechercher une resource")
+group.add_argument('--getAllResources', action='store_const', const=True, help="rechercher toutes les resources")
 
 # Requêtes sur les groupes
 group.add_argument( '--getAllGroups', action = 'store_true' ,
@@ -772,6 +776,42 @@ elif args[ 'setGroupSenders' ]:
         print( "Echec d'exécution : {}".format( repr( err ) ) )
         sys.exit( 2 )
     print( group.showAttr( ) )
+
+elif args[ 'getResource' ]:
+    try:
+        if not args[ 'email' ]:
+            raise Exception( "Argument 'email' manquant" )
+        data = { 'name' : args[ 'email' ] }
+        if 'fullData' in args:
+            data[ 'full_info' ] = args[ 'fullData' ]
+        resource = ResourceService.getResource( **data )
+    except Exception as err:
+        print( "Echec d'exécution : {}".format( repr( err ) ) )
+        sys.exit( 2 )
+    if resource is None:
+        print( "Groupe {} non trouvé".format( args[ 'email' ] ) )
+    else:
+        print( resource.showAttr( ) )
+
+elif args[ 'getAllResources' ]:
+    data = {
+        'domain' : args[ 'domain' ] ,
+        'limit'  : args[ 'limit' ]
+    }
+
+    try:
+        all_resources = ResourceService.getAllResources( **data )
+    except Exception as err:
+        print( "Echec d'exécution : {}".format( repr( err ) ) )
+        sys.exit( 2 )
+
+    print( "{} groupes retournés".format( len( all_resources ) ) )
+
+    print( )
+    for resource in all_resources:
+        print( "Resource {} : ".format( resource.name ) )
+        print( resource.showAttr( ) )
+        print( )
 
 else:
     print("Aucune opération à exécuter")
