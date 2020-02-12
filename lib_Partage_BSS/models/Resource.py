@@ -121,15 +121,15 @@ class Resource( GlobalModel ):
     def from_bss( data ):
         """
         Crée une instance en se basant sur des données reçues du serveur
-        Partage, soit via GetGroup soit via GetAllGroups. Dans le premier cas,
+        Partage, soit via GetResource soit via GetAllResources. Dans le premier cas,
         tous les champs à l'exception de la liste des utilisateurs autorisés à
-        expédier avec l'adresse du groupe seront mis à jour.
+        expédier avec l'adresse de la resource seront mis à jour.
 
-        :param data: les données du compte reçues depuis le serveur Partage
+        :param data: les données de la resource reçues depuis le serveur Partage
 
         :raises TypeError: un champ n'a pas le format attendu
 
-        :return: l'instance de Group créée, avec ses champs renseignés
+        :return: l'instance de la Resource créée, avec ses champs renseignés
         """
         ressource = Resource( data[ 'name' ] )
         ressource.from_dict( data )
@@ -138,13 +138,13 @@ class Resource( GlobalModel ):
     def from_dict( self , data , allow_name_resType = True ):
         """
         Met à jour les champs d'une instance à partir d'un dictionnaire. Seuls
-        les attributs, et optionellement le nom, peuvent être modifiés par cette
+        les attributs, et optionellement le nom et zimbraCalResType, peuvent être modifiés par cette
         méthode.
 
         :param data: le dictionnaire à partir duquel on veut mettre à jour les \
                 données
-        :param allow_name: permettre la modification du champ 'name' à partir \
-                du dictionnaire; si False, une entrée 'name' dans le \
+        :param allow_name_resType: permettre la modification du champ 'name' à partir \
+                du dictionnaire; si False, les entrées 'name' et 'zimbraCalResType' dans le \
                 dictionnaire sera ignorée
 
         :raises TypeError: un champ n'a pas le format attendu
@@ -159,8 +159,8 @@ class Resource( GlobalModel ):
 
     def to_bss( self ):
         """
-        Génère un dictionnaire pouvant être utilisé pour créer ou modifier un
-        groupe sur le serveur.
+        Génère un dictionnaire pouvant être utilisé pour créer ou modifier une
+        resource sur le serveur.
 
         :return: le dictionnaire contenant les attributs
         """
