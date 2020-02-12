@@ -95,6 +95,8 @@ parser.add_argument( '--sender' , action = 'append' ,
     metavar = 'example@example.org' ,
     help = '''Compte autorisé à utiliser l'adresse mail d'un groupe ou d'une
               liste de distribution en adresse d'expédition.''' )
+parser.add_argument('--zimbraCalResType', metavar='Location', help="Type de la resource")
+parser.add_argument('--displayName', metavar='Resource', help="Nom de la resource")
 
 group = parser.add_argument_group('Opérations implémentées :')
 group.add_argument('--getAccount', action='store_const', const=True, help="rechercher un compte")
@@ -124,7 +126,8 @@ parser.add_argument('--type', metavar='userAccount', help="type d'objet à reche
 group.add_argument('--getResource', action='store_const', const=True, help="rechercher une resource")
 group.add_argument('--getAllResources', action='store_const', const=True, help="rechercher toutes les resources")
 group.add_argument('--deleteResource', action='store_const', const=True, help="Supprimer une resource")
-group.add_argument('--modifyResource', action='store_const', const=True, help="Modifier une resource")
+group.add_argument('--modifyResource', action='store_const', const=True, help="Supprimer une resource")
+group.add_argument('--createResource', action='store_const', const=True, help="Modifier une resource")
 
 # Requêtes sur les groupes
 group.add_argument( '--getAllGroups', action = 'store_true' ,
@@ -822,6 +825,36 @@ elif args[ 'deleteResource' ]:
         print( "Echec d'exécution : {}".format( repr( err ) ) )
         sys.exit( 2 )
     print( "Ressource {} supprimé".format( args[ 'email' ] ) )
+
+elif args['createResource']:
+
+    if not args['email']:
+        raise Exception("Missing 'email' argument")
+
+    if not args['userPassword']:
+        raise Exception("Missing 'userPassword' argument")
+    try:
+        if not args['email']:
+            raise Exception("Argument 'email' manquant")
+        data = {'name': "test_bobo@univ-rennes1.fr"}
+        resource = ResourceService.getResource(**data)
+    except Exception as err:
+        print("Echec d'exécution 1 : {}".format(repr(err)))
+        sys.exit(2)
+    password=None
+    if resource is None:
+        print( "Groupe {} non trouvé".format( args[ 'email' ] ) )
+    else:
+        resource.co="Espagne"
+        #password="123456"
+    try:
+        ResourceService.createResource(name=args['email'], userPassword=args['userPassword'], zimbraCalResType=args['zimbraCalResType'],displayName=args['displayName'],password=password, resource=resource )
+
+    except Exception as err:
+        print("Echec d'exécution : %s" % err)
+        sys.exit(2)
+
+    print("La Ressource %s a été créé" % args['email'])
 
 elif args[ 'modifyResource' ]:
     try:
