@@ -226,29 +226,6 @@ class Resource( GlobalModel ):
                 setattr( resource , a , record[ a ] )
         return resource
 
-    """
-    def to_json_record( self ):
-        "
-        Génère les données (sous la forme d'un dictionnaire Python) pour un
-        enregistrement JSON décrivant l'instance.
-
-        :return: un dictionnaire contenant les champs appropriés pour \
-                sauvegarde au format JSON
-        "
-        rv = {
-            a : getattr( self , a )
-                for a in ( 'name' , *Resource.ATTRIBUTES )
-                if getattr( self , a ) is not None
-        }
-        rv.update({
-            s : list( getattr( self , '_{}'.format( s ) ) )
-                for s in Group.SETS
-                if getattr( self , '_{}'.format( s ) )
-        })
-        return rv
-        """
-    #---------------------------------------------------------------------------
-
     def addZimbraPrefCalendarForwardInvitesTo(self, value):
         if isinstance(value, str):
             if self._zimbraPrefCalendarForwardInvitesTo is None:
@@ -256,14 +233,14 @@ class Resource( GlobalModel ):
             if value not in self._zimbraPrefCalendarForwardInvitesTo:
                 self._zimbraPrefCalendarForwardInvitesTo.append(value)
         else:
-            raise TypeError
+            raise TypeError("addZimbraPrefCalendarForwardInvitesTo")
 
     def removeZimbraPrefCalendarForwardInvitesTo(self, valueToRemove):
         if isinstance(valueToRemove, str):
             if valueToRemove in self._zimbraPrefCalendarForwardInvitesTo:
                 self._zimbraPrefCalendarForwardInvitesTo.remove(valueToRemove)
         else:
-            raise TypeError
+            raise TypeError("removeZimbraPrefCalendarForwardInvitesTo")
 
     # ---------------------------------------------------------------------------
 
@@ -276,7 +253,7 @@ class Resource( GlobalModel ):
         if isinstance( value , str ) or value is None:
             self._description = value
         else:
-            raise TypeError
+            raise TypeError("description")
 
     #---------------------------------------------------------------------------
 
@@ -289,7 +266,7 @@ class Resource( GlobalModel ):
         if isinstance( value , str ) or value is None:
             self._displayName = value
         else:
-            raise TypeError
+            raise TypeError("displayName")
 
     #---------------------------------------------------------------------------
 
@@ -302,7 +279,7 @@ class Resource( GlobalModel ):
         if isinstance(value, str) or value is None:
             self._co = value
         else:
-            raise TypeError
+            raise TypeError("co")
 
     # ---------------------------------------------------------------------------
 
@@ -315,7 +292,7 @@ class Resource( GlobalModel ):
         if isinstance(value, str) or value is None:
             self._l = value
         else:
-            raise TypeError
+            raise TypeError("l")
 
     # ---------------------------------------------------------------------------
 
@@ -332,7 +309,7 @@ class Resource( GlobalModel ):
             if utils.checkIsNum(value):
                 val = value
         else:
-            raise TypeError
+            raise TypeError("postalCode")
         self._postalCode = val
 
 
@@ -347,7 +324,7 @@ class Resource( GlobalModel ):
         if isinstance(value, str) or value is None:
             self._street = value
         else:
-            raise TypeError
+            raise TypeError("street")
 
     # ---------------------------------------------------------------------------
 
@@ -360,7 +337,7 @@ class Resource( GlobalModel ):
         if isinstance(value, str) or value is None:
             self._st = value
         else:
-            raise TypeError
+            raise TypeError("st")
 
     # ---------------------------------------------------------------------------
 
@@ -384,7 +361,7 @@ class Resource( GlobalModel ):
         if isinstance(value, str) or value is None:
             self._zimbraCalResLocationDisplayName = value
         else:
-            raise TypeError
+            raise TypeError("zimbraCalResLocationDisplayName")
 
     # ---------------------------------------------------------------------------
 
@@ -397,7 +374,7 @@ class Resource( GlobalModel ):
         if isinstance(value, str) or value is None:
             self._zimbraCalResSite = value
         else:
-            raise TypeError
+            raise TypeError("zimbraCalResSite")
 
     # ---------------------------------------------------------------------------
 
@@ -410,7 +387,7 @@ class Resource( GlobalModel ):
         if isinstance(value, str) or value is None:
             self._zimbraCalResBuilding = value
         else:
-            raise TypeError
+            raise TypeError("zimbraCalResBuilding")
 
     # ---------------------------------------------------------------------------
 
@@ -423,7 +400,7 @@ class Resource( GlobalModel ):
         if isinstance(value, str) or value is None:
             self._zimbraCalResFloor = value
         else:
-            raise TypeError
+            raise TypeError("zimbraCalResFloor")
 
     # ---------------------------------------------------------------------------
 
@@ -436,7 +413,7 @@ class Resource( GlobalModel ):
         if isinstance(value, str) or value is None:
             self._zimbraCalResRoom = value
         else:
-            raise TypeError
+            raise TypeError("zimbraCalResRoom")
 
     # ---------------------------------------------------------------------------
 
@@ -453,7 +430,7 @@ class Resource( GlobalModel ):
             if utils.checkIsNum(value):
                 val = value
         else:
-            raise TypeError
+            raise TypeError("zimbraCalResCapacity")
         self._zimbraCalResCapacity = val
 
     # ---------------------------------------------------------------------------
@@ -504,7 +481,7 @@ class Resource( GlobalModel ):
             else:
                 raise NameException("L'adresse mail " + value + " n'est pas une adresse mail valide")
         else:
-            raise TypeError
+            raise TypeError("zimbraCalResContactEmail")
 
     #---------------------------------------------------------------------------
 
@@ -517,7 +494,7 @@ class Resource( GlobalModel ):
         if isinstance(value, str) or value is None:
             self._zimbraCalResContactName = value
         else:
-            raise TypeError
+            raise TypeError("zimbraCalResContactName")
 
     # ---------------------------------------------------------------------------
 
@@ -530,6 +507,6 @@ class Resource( GlobalModel ):
         if isinstance( value , str ) or value is None:
             self._zimbraNotes = value
         else:
-            raise TypeError
+            raise TypeError("zimbraNotes")
 
     # ---------------------------------------------------------------------------
