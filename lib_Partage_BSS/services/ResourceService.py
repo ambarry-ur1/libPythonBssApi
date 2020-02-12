@@ -142,3 +142,21 @@ def deleteResource( name_or_resource ):
     domain = services.extractDomain( data[ 'name' ] )
     response = callMethod( domain , 'DeleteResource' , data )
     checkResponseStatus( response)
+
+#-------------------------------------------------------------------------------
+# Opération de modification
+
+def modifyResource( resource ):
+    """
+    Modifie les informations concernant une ressource.
+
+    :param resource: l'instance du modèle contenant les nouvelles informations \
+            ainsi que l'adresse du groupe à modifier
+
+    :raises NameException: l'adresse de groupe spécifiée est incorrecte
+    :raises ServiceException: la requête vers l'API a echoué
+    :raises DomainException: le domaine n'est pas valide
+    """
+    response = callMethod( services.extractDomain( resource.name ) ,
+            'ModifyResource' , resource.toData( ) )
+    checkResponseStatus( response)
