@@ -397,10 +397,15 @@ class Resource( GlobalModel ):
 
     @zimbraCalResFloor.setter
     def zimbraCalResFloor(self, value):
-        if isinstance(value, str) or value is None:
-            self._zimbraCalResFloor = value
+        if isinstance(value, collections.OrderedDict):
+            if utils.checkIsNum(value['content']):
+                val = value['content']
+        elif isinstance(value, str) or value is None:
+            if utils.checkIsNum(value):
+                val = value
         else:
             raise TypeError("zimbraCalResFloor")
+        self._zimbraCalResFloor = val
 
     # ---------------------------------------------------------------------------
 
@@ -410,10 +415,15 @@ class Resource( GlobalModel ):
 
     @zimbraCalResRoom.setter
     def zimbraCalResRoom(self, value):
-        if isinstance(value, str) or value is None:
-            self._zimbraCalResRoom = value
+        if isinstance(value, collections.OrderedDict):
+            if utils.checkIsNum(value['content']):
+                val = value['content']
+        elif isinstance(value, str) or value is None:
+            if utils.checkIsNum(value):
+                val = value
         else:
             raise TypeError("zimbraCalResRoom")
+        self._zimbraCalResRoom = val
 
     # ---------------------------------------------------------------------------
 
