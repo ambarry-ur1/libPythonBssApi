@@ -124,6 +124,7 @@ parser.add_argument('--type', metavar='userAccount', help="type d'objet à reche
 group.add_argument('--getResource', action='store_const', const=True, help="rechercher une resource")
 group.add_argument('--getAllResources', action='store_const', const=True, help="rechercher toutes les resources")
 group.add_argument('--deleteResource', action='store_const', const=True, help="Supprimer une resource")
+group.add_argument('--modifyResource', action='store_const', const=True, help="Modifier une resource")
 
 # Requêtes sur les groupes
 group.add_argument( '--getAllGroups', action = 'store_true' ,
@@ -821,6 +822,24 @@ elif args[ 'deleteResource' ]:
         print( "Echec d'exécution : {}".format( repr( err ) ) )
         sys.exit( 2 )
     print( "Ressource {} supprimé".format( args[ 'email' ] ) )
+
+elif args[ 'modifyResource' ]:
+    try:
+        if not args[ 'email' ]:
+            raise Exception( "Argument 'email' manquant" )
+        resource = ResourceService.getResource(args['email'])
+        resource.name=args['email']
+        resource.co="France"
+        resource.street="53 rue papu"
+    except Exception as err:
+        print( "Echec d'exécution : {}".format( repr( err ) ) )
+        sys.exit( 2 )
+    try:
+        ResourceService.modifyResource(resource)
+    except Exception as err:
+        print("Echec d'exécution 1 : {}".format(repr(err)))
+        sys.exit(2)
+    print( "Ressource {} bien Modifié".format( resource.name ) )
 
 else:
     print("Aucune opération à exécuter")
