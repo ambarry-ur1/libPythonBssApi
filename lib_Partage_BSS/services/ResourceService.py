@@ -117,7 +117,7 @@ def createResource( name, userPassword, zimbraCalResType, displayName, password=
                 'displayName': displayName
                 })
     if not utils.checkIsMailAddress( data[ 'name' ] ):
-        raise NameException( "L'adresse mail {} n'est pas valide".format( name_or_resource ) )
+        raise NameException( "L'adresse mail {} n'est pas valide".format( name ) )
 
     domain = services.extractDomain( data[ 'name' ] )
     response = callMethod( domain , 'CreateResource' , data )
