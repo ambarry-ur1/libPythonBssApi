@@ -785,7 +785,7 @@ elif args[ 'getResource' ]:
         data = { 'name' : args[ 'email' ] }
         resource = ResourceService.getResource( **data )
     except Exception as err:
-        print( "Echec d'exécution 11 : {}".format( repr( err ) ) )
+        print( "Echec d'exécution : {}".format( repr( err ) ) )
         sys.exit( 2 )
     if resource is None:
         print( "Groupe {} non trouvé".format( args[ 'email' ] ) )
