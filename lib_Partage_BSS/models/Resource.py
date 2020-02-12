@@ -340,6 +340,7 @@ class Resource( GlobalModel ):
 
     @postalCode.setter
     def postalCode(self, value):
+        val = None
         if isinstance(value, collections.OrderedDict):
             if utils.checkIsNum(value['content']):
                 val = value['content']
@@ -435,6 +436,7 @@ class Resource( GlobalModel ):
 
     @zimbraCalResFloor.setter
     def zimbraCalResFloor(self, value):
+        val = None
         if isinstance(value, collections.OrderedDict):
             if utils.checkIsNum(value['content']):
                 val = value['content']
@@ -453,6 +455,7 @@ class Resource( GlobalModel ):
 
     @zimbraCalResRoom.setter
     def zimbraCalResRoom(self, value):
+        val = None
         if isinstance(value, collections.OrderedDict):
             if utils.checkIsNum(value['content']):
                 val = value['content']
@@ -471,6 +474,7 @@ class Resource( GlobalModel ):
 
     @zimbraCalResCapacity.setter
     def zimbraCalResCapacity(self, value):
+        val = None
         if isinstance(value, collections.OrderedDict):
             if utils.checkIsNum(value['content']):
                 val = value['content']
