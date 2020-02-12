@@ -1,4 +1,5 @@
 # -*-coding:utf-8 -*
+import collections
 import json
 
 from lib_Partage_BSS import utils
@@ -324,11 +325,16 @@ class Resource( GlobalModel ):
 
     @postalCode.setter
     def postalCode(self, value):
-        if isinstance(value, str) or value is None:
+        if isinstance(value, collections.OrderedDict):
+            if utils.checkIsNum(value['content']):
+                val = value['content']
+        elif isinstance(value, str) or value is None:
             if utils.checkIsNum(value):
-                self._postalCode = value
+                val = value
         else:
             raise TypeError
+        self._postalCode = val
+
 
     # ---------------------------------------------------------------------------
 
@@ -399,7 +405,7 @@ class Resource( GlobalModel ):
     def zimbraCalResBuilding(self):
         return self._zimbraCalResBuilding
 
-    @zimbraCalResSite.setter
+    @zimbraCalResBuilding.setter
     def zimbraCalResBuilding(self, value):
         if isinstance(value, str) or value is None:
             self._zimbraCalResBuilding = value
@@ -440,11 +446,15 @@ class Resource( GlobalModel ):
 
     @zimbraCalResCapacity.setter
     def zimbraCalResCapacity(self, value):
-        if isinstance(value, str) or value is None:
+        if isinstance(value, collections.OrderedDict):
+            if utils.checkIsNum(value['content']):
+                val = value['content']
+        elif isinstance(value, str) or value is None:
             if utils.checkIsNum(value):
-                self._zimbraCalResCapacity = value
+                val = value
         else:
             raise TypeError
+        self._zimbraCalResCapacity = val
 
     # ---------------------------------------------------------------------------
 
