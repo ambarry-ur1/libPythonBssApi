@@ -74,7 +74,7 @@ def getResource( name ):
 #-------------------------------------------------------------------------------
 # Création & suppression
 
-def createResource( name_or_resource, userPassword, zimbraCalResType ):
+def createResource( name, userPassword, zimbraCalResType, displayName, password=None, resource=None ):
     """
     Crée une ressource en se basant sur une instance du
     modèle, ou simplement en utilisant un nom.
@@ -87,26 +87,35 @@ def createResource( name_or_resource, userPassword, zimbraCalResType ):
     :raises ServiceException: la requête vers l'API a echoué
     :raises DomainException: le domaine n'est pas valide
     """
-    if not re.search(r'^\{\S+\}', userPassword):
-        raise NameException("Le format de l'empreinte du mot de passe n'est pas correcte ; format attendu : {algo}empreinte")
-    data = {}
-    is_resource = isinstance( name_or_resource , Resource )
-    if is_resource:
-        if name_or_resource.name is None:
-            raise NameException( "L'adresse mail n'est pas renseignée" )
-        data = name_or_resource.to_bss()
-        name = data['name']
-    else:
-        if not isinstance( name_or_resource , str ):
-            raise TypeError
-        name = name_or_resource
-    data.update({'name': name,
-            'passsword': "",
-            'userPassword': userPassword,
-            'zimbraCalResType': zimbraCalResType,
-            'zimbraAccountStatus': "active"
-            })
 
+    if not utils.checkIsMailAddress(name):
+        raise NameException("L'adresse mail " + name + " n'est pas valide")
+
+    # Les attributs issus de l'objet account
+    data = {}
+    if resource is not None:
+        data = resource.toData()
+
+    # Les attributs obligatoires
+    if password is not None:
+        data.update({'name': name,
+                     'passsword': "",
+                     'password': password,
+                     'zimbraCalResType': zimbraCalResType,
+                     'zimbraAccountStatus': "active",
+                     'displayName': displayName
+                     })
+    else:
+        if not re.search(r'^\{\S+\}', userPassword):
+            raise NameException(
+                "Le format de l'empreinte du mot de passe n'est pas correcte ; format attendu : {algo}empreinte")
+        data.update({'name': name,
+                'passsword': "",
+                'userPassword': userPassword,
+                'zimbraCalResType': zimbraCalResType,
+                'zimbraAccountStatus': "active",
+                'displayName': displayName
+                })
     if not utils.checkIsMailAddress( data[ 'name' ] ):
         raise NameException( "L'adresse mail {} n'est pas valide".format( name_or_resource ) )
 
@@ -151,9 +160,9 @@ def modifyResource( resource ):
     Modifie les informations concernant une ressource.
 
     :param resource: l'instance du modèle contenant les nouvelles informations \
-            ainsi que l'adresse du groupe à modifier
+            ainsi que l'adresse de la ressource à modifier
 
-    :raises NameException: l'adresse de groupe spécifiée est incorrecte
+    :raises NameException: l'adresse de la ressource spécifiée est incorrecte
     :raises ServiceException: la requête vers l'API a echoué
     :raises DomainException: le domaine n'est pas valide
     """
