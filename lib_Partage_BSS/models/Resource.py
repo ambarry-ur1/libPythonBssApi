@@ -529,7 +529,7 @@ class Resource( GlobalModel ):
     def zimbraCalResContactEmail( self , value ):
         if isinstance(value, str) or value is None:
             if utils.checkIsMailAddress(value):
-                self.__zimbraCalResContactEmail = value
+                self._zimbraCalResContactEmail = value
             else:
                 raise NameException("L'adresse mail " + value + " n'est pas une adresse mail valide")
         else:
