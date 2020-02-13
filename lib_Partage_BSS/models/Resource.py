@@ -272,13 +272,13 @@ class Resource( GlobalModel ):
         if isinstance(value, str) or value is None:
             if self._zimbraPrefCalendarForwardInvitesTo is None:
                 self._zimbraPrefCalendarForwardInvitesTo = []
-            if value not in self._zimbraPrefCalendarForwardInvitesTo:
+            if value not in self._zimbraPrefCalendarForwardInvitesTo and utils.checkIsMailAddress(value):
                 self._zimbraPrefCalendarForwardInvitesTo.append(value)
         elif isinstance(value, collections.OrderedDict):
             if isinstance(value['zimbraPrefCalendarForwardInvitesTo'], list):
                 if self._zimbraPrefCalendarForwardInvitesTo is None:
                     self._zimbraPrefCalendarForwardInvitesTo = []
-                if not self._zimbraPrefCalendarForwardInvitesTo is None:
+                if value['zimbraPrefCalendarForwardInvitesTo'] not in self._zimbraPrefCalendarForwardInvitesTo:
                     self._zimbraPrefCalendarForwardInvitesTo += value['zimbraPrefCalendarForwardInvitesTo']
         else:
             raise TypeError("addZimbraPrefCalendarForwardInvitesTo")
@@ -286,7 +286,10 @@ class Resource( GlobalModel ):
     def removeZimbraPrefCalendarForwardInvitesTo(self, valueToRemove):
         if isinstance(valueToRemove, str):
             if valueToRemove in self._zimbraPrefCalendarForwardInvitesTo:
-                self._zimbraPrefCalendarForwardInvitesTo.remove(valueToRemove)
+                if len(self._zimbraPrefCalendarForwardInvitesTo) == 1:
+                    self._zimbraPrefCalendarForwardInvitesTo.clear()
+                else:
+                    self._zimbraPrefCalendarForwardInvitesTo.remove(valueToRemove)
         else:
             raise TypeError("removeZimbraPrefCalendarForwardInvitesTo")
 
