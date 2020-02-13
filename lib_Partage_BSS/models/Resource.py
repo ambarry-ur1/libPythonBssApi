@@ -157,9 +157,7 @@ class Resource( GlobalModel ):
         for a in attrs:
             if a in data:
                 if a == "zimbraPrefCalendarForwardInvitesTo":
-                    print("------------- %s --> %s " %(type(data[a]), data[a]))
                     self.addZimbraPrefCalendarForwardInvitesTo(data[a])
-                    print("-------!!!!!!!!!!!!------ %s --> %s " % (type(data[a]), data[a]))
                 else:
                     setattr( self , a , data[ a ] )
 
