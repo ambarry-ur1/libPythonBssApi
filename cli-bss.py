@@ -863,7 +863,8 @@ elif args[ 'modifyResource' ]:
         resource = ResourceService.getResource(args['email'])
         resource.name=args['email']
         resource.co="France"
-        resource.street="53 rue papu"
+        resource.street="53 R"
+
     except Exception as err:
         print( "Echec d'exécution : {}".format( repr( err ) ) )
         sys.exit( 2 )
