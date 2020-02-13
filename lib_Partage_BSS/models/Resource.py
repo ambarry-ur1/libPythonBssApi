@@ -1,4 +1,5 @@
 # -*-coding:utf-8 -*
+import array
 import collections
 import json
 
@@ -155,7 +156,12 @@ class Resource( GlobalModel ):
             )
         for a in attrs:
             if a in data:
-                setattr( self , a , data[ a ] )
+                if a == "zimbraPrefCalendarForwardInvitesTo":
+                    print("------------- %s --> %s " %(type(data[a]), data[a]))
+                    self.addZimbraPrefCalendarForwardInvitesTo(data[a])
+                    print("-------!!!!!!!!!!!!------ %s --> %s " % (type(data[a]), data[a]))
+                else:
+                    setattr( self , a , data[ a ] )
 
     def to_bss( self ):
         """
@@ -265,11 +271,17 @@ class Resource( GlobalModel ):
         return resource
 
     def addZimbraPrefCalendarForwardInvitesTo(self, value):
-        if isinstance(value, str):
+        if isinstance(value, str) or value is None:
             if self._zimbraPrefCalendarForwardInvitesTo is None:
                 self._zimbraPrefCalendarForwardInvitesTo = []
             if value not in self._zimbraPrefCalendarForwardInvitesTo:
                 self._zimbraPrefCalendarForwardInvitesTo.append(value)
+        elif isinstance(value, collections.OrderedDict):
+            if isinstance(value['zimbraPrefCalendarForwardInvitesTo'], list):
+                if self._zimbraPrefCalendarForwardInvitesTo is None:
+                    self._zimbraPrefCalendarForwardInvitesTo = []
+                if not self._zimbraPrefCalendarForwardInvitesTo is None:
+                    self._zimbraPrefCalendarForwardInvitesTo += value['zimbraPrefCalendarForwardInvitesTo']
         else:
             raise TypeError("addZimbraPrefCalendarForwardInvitesTo")
 
@@ -562,3 +574,7 @@ class Resource( GlobalModel ):
             raise TypeError("zimbraNotes")
 
     # ---------------------------------------------------------------------------
+
+    @property
+    def zimbraPrefCalendarForwardInvitesTo(self):
+        return self._zimbraPrefCalendarForwardInvitesTo
