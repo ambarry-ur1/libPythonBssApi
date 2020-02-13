@@ -60,12 +60,11 @@ def checkResponseStatus(response):
         status = utils.changeToInt(response["status"])
     except TypeError:
         raise ServiceException(response["status"], response["message"])
-
     if status != 0:
         # On essaie de déterminer les erreurs temporaires versus définitives, à partir du contenu de response["message"]
         if re.search('(unable to get connection|Invalid token)', response["message"]):
             raise TmpServiceException(response["status"], response["message"])
-        elif re.search('(no such account|no such domain|no such distribution list|no such cos)', response["message"]):
+        elif re.search('(no such account|no such domain|no such distribution list|no such cos| no such calendar resource)', response["message"]):
             raise NotFoundException(response["status"], response["message"])
         else:
             raise ServiceException(response["status"], response["message"])
