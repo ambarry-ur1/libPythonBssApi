@@ -35,7 +35,10 @@ def getAllResources( domain , limit = 100 , offset = 0 ):
     }
 
     response = callMethod( domain , 'GetAllResources' , data )
-    checkResponseStatus( response)
+    try:
+        checkResponseStatus(response)
+    except NotFoundException:
+        return None
 
     # Attention : xmljson retourne un dictionnaire contenant une entrée également par attribut XML
     # Donc il y a une entrée pour l'attribut "type" de "<groups type="array">"
@@ -67,7 +70,10 @@ def getResource( name ):
     data = { 'name' : name }
     domain = services.extractDomain( name )
     response = callMethod( domain , 'GetResource' , data )
-    checkResponseStatus(response)
+    try:
+        checkResponseStatus(response)
+    except NotFoundException:
+        return None
     resource = response[ 'resource' ]
     return Resource.from_bss( resource )
 
@@ -121,7 +127,7 @@ def createResource( name, userPassword, zimbraCalResType, displayName, password=
 
     domain = services.extractDomain( data[ 'name' ] )
     response = callMethod( domain , 'CreateResource' , data )
-    checkResponseStatus( response)
+    checkResponseStatus(response)
 
     return getResource(name)
 
