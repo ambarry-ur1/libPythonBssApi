@@ -272,8 +272,11 @@ class Resource( GlobalModel ):
         if isinstance(value, str) or value is None:
             if self._zimbraPrefCalendarForwardInvitesTo is None:
                 self._zimbraPrefCalendarForwardInvitesTo = []
-            if value not in self._zimbraPrefCalendarForwardInvitesTo and utils.checkIsMailAddress(value):
-                self._zimbraPrefCalendarForwardInvitesTo.append(value)
+            if value not in self._zimbraPrefCalendarForwardInvitesTo:
+                if utils.checkIsMailAddress(value):
+                    self._zimbraPrefCalendarForwardInvitesTo.append(value)
+                else:
+                    raise TypeError("addZimbraPrefCalendarForwardInvitesTo")
         elif isinstance(value, collections.OrderedDict):
             if isinstance(value['zimbraPrefCalendarForwardInvitesTo'], list):
                 if self._zimbraPrefCalendarForwardInvitesTo is None:
@@ -286,13 +289,35 @@ class Resource( GlobalModel ):
     def removeZimbraPrefCalendarForwardInvitesTo(self, valueToRemove):
         if isinstance(valueToRemove, str):
             if valueToRemove in self._zimbraPrefCalendarForwardInvitesTo:
-                if len(self._zimbraPrefCalendarForwardInvitesTo) == 1:
-                    self._zimbraPrefCalendarForwardInvitesTo.clear()
-                else:
-                    self._zimbraPrefCalendarForwardInvitesTo.remove(valueToRemove)
+                self._zimbraPrefCalendarForwardInvitesTo.remove(valueToRemove)
         else:
             raise TypeError("removeZimbraPrefCalendarForwardInvitesTo")
 
+
+    """
+    def removeZimbraPrefCalendarForwardInvitesTo(self, valueToRemove):
+        if isinstance(valueToRemove, str):
+            if valueToRemove in self._zimbraPrefCalendarForwardInvitesTo:
+                if isinstance(self._zimbraPrefCalendarForwardInvitesTo, list):
+                    print("LIST")
+                    if len(self._zimbraPrefCalendarForwardInvitesTo) == 1:
+                        self._zimbraPrefCalendarForwardInvitesTo.clear()
+                    else:
+                        self._zimbraPrefCalendarForwardInvitesTo.remove(valueToRemove)
+                elif isinstance(self._zimbraPrefCalendarForwardInvitesTo, str):
+                    print("STR")
+                    print(self._zimbraPrefCalendarForwardInvitesTo)
+                    print(valueToRemove)
+                    self._zimbraPrefCalendarForwardInvitesTo=""
+                    print(self._zimbraPrefCalendarForwardInvitesTo)
+                    print(valueToRemove)
+            if len(self._zimbraPrefCalendarForwardInvitesTo) == 0:
+                print("LEN = 0")
+                self._zimbraPrefCalendarForwardInvitesTo = ""
+        else:
+            raise TypeError("removeZimbraPrefCalendarForwardInvitesTo")
+
+    """
     # ---------------------------------------------------------------------------
 
     @property
